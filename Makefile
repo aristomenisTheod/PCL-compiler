@@ -1,9 +1,13 @@
-CPFLAGS = -Wall
+CXX=g++
+CXXFLAGS=-Wall
 
-all: lex.yy.cc lexerc
+all: lexer.cpp lexer
 
-lex.yy.cc: lexer.l
-	flex lexer.l
+lexer.cpp: lexer.l
+	flex -s -o lexer.cpp lexer.l
 
-lexerc: lex.yy.cc
-	g++ $(CPFLAGS) -o lexerc lex.yy.cc
+lexer: lexer.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+clean:
+	$(RM) lexer.cpp lexer
