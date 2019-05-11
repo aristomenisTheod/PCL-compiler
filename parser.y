@@ -148,11 +148,11 @@ r_value:
     T_integer
     | T_character
     | T_real
+    | T_boolean
     | '(' r_value ')'
     | "nil"
     | call
     | '@' l_value
-    | T_boolean
     | unop expr
     | expr binop expr
 ;
