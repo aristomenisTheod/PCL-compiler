@@ -44,7 +44,12 @@
 %nonassoc '=' '>' '<' "<=" ">=" "<>"
 %left '+' '-' "or"
 %left '*' '/' "div" "mod" "and"
-%right "not"
+%nonassoc "not"
+%nonassoc PLUS MINUS
+%nonassoc '^'
+%nonassoc '@'
+%nonassoc "then"
+%nonassoc "else"
 
 %%
 
@@ -53,7 +58,8 @@ program:
 ;
 
 body:
-    local block
+    /* nothing */
+    | local block
 ;
 
 local:
@@ -91,8 +97,7 @@ type:
 ;
 
 block:
-    /* nothing */
-    |"begin" stmt_list "end"
+    "begin" stmt_list "end"
 ;
 
 stmt_list:
@@ -148,19 +153,15 @@ r_value:
     T_integer
     | T_character
     | T_real
-    | T_boolean
     | '(' r_value ')'
     | "nil"
     | call
     | '@' l_value
-    | unop expr
+    | T_boolean
+    |"not" expr
+    | '+' expr %prec PLUS
+    | '-' expr %prec MINUS
     | expr binop expr
-;
-
-unop:
-    "not"
-    | '+'
-    | '-'
 ;
 
 binop:
