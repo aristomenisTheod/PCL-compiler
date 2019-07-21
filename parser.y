@@ -32,7 +32,6 @@
 %token T_integerId "integer"
 %token T_realId "real"
 %token T_characterId "character"
-%token T_stringId "string"
 %token T_null "nil"
 %token T_boolean
 %token T_integer
@@ -138,14 +137,20 @@ stmt_block:
 expr:
     l_value
     | r_value
+    | mem
 ;
+
+mem:
+    '@' l_value
+    | '@' '(' expr '^' ')'
+    | expr '^'
+    | '(' '@' l_value ')' '^'
 
 l_value:
     T_name
     | "result"
     | T_string
     | l_value '[' expr ']'
-    | expr '^'
     | '(' l_value ')'
 ;
 
@@ -156,29 +161,24 @@ r_value:
     | '(' r_value ')'
     | "nil"
     | call
-    | '@' l_value
     | T_boolean
-    |"not" expr
+    | "not" expr
     | '+' expr %prec PLUS
     | '-' expr %prec MINUS
-    | expr binop expr
-;
-
-binop:
-    '+'
-    | '-'
-    | '*'
-    | '/'
-    | "div"
-    | "mod"
-    | "or"
-    | "and"
-    | '='
-    | "<>"
-    | '<'
-    | "<="
-    | '>'
-    | ">="
+    | expr '+' expr
+    | expr '-' expr
+    | expr '*' expr
+    | expr '/' expr
+    | expr "div" expr
+    | expr "mod" expr
+    | expr "or" expr
+    | expr "and" expr
+    | expr '=' expr
+    | expr "<>" expr
+    | expr '<' expr
+    | expr "<=" expr
+    | expr '>' expr
+    | expr ">=" expr
 ;
 
 %%
