@@ -1,0 +1,4 @@
+program test;
+begin
+  n = 5
+end.

@@ -1,22 +1,26 @@
 %option noyywrap
 
 %{
+#include <iostream>
 #include "parser.hpp"
 #include "lexer.hpp"
+
+using namespace std;
 %}
 
-Name [A-Za-z]
+Name [a-zA-Z]
 Dig [0-9]
 White [ \t\n\r]
-Op ">="|"<="|"<>"|"="|">"|"<"|"/"|"+"|"-"|"*"|"^"|"@"
-Sep ":="|";"|"."|"("|")"|":"|","|"["|"]"
-Char [\x20\x21\x23-\x26\x28-\x5b\x5d-\x7e]|"\n"|"\t"|"\r"|"\0"|"\\"|"\'"|"\""
+Op [=></+*^@-]
+Sep ":"|"["|"]"|";"
+Char [\x0\x9\xa\xd\x20\x21\x23-\x26\x28-\x7e]
 
 %%
 
-program                             { return T_program; }
+program                             { return T_program;}
 nil                                 { return T_null; }
-true|false                          { return T_boolean; }
+true                                { return T_true;}
+false                               { return T_false; }
 boolean                             { return T_booleanId; }
 integer                             { return T_integerId; }
 real                                { return T_realId; }
@@ -44,15 +48,23 @@ result                              { return T_result; }
 return                              { return T_return; }
 goto                                { return T_goto; }
 label                               { return T_label; }
-"\'"{Char}."\'"                     { return T_character; }
-("\"").{Char}+"\"".                 { return T_string; }
-{Dig}+                              { return T_integer; }
-{Dig}+[.]{Dig}+((e|E)[+-]?{Dig}+)?  { return T_real; }
-{Op}.                               { return yytext[0]; }
-{Sep}.                              { return yytext[0]; }
-{White}+                            { /* nothing */ }
-{Name}*                             { return T_name; }
-.                                   { yyerror("lexical error"); }
+">="                                { return T_ge; }
+"<="                                { return T_le; }
+"<>"                                { return T_dif; }
+":="                                { return T_set; }
+"."                                 { return yytext[0];}
+","                                 { return yytext[0];}
+"("                                 { return yytext[0];}
+")"                                 { return yytext[0];}
+\'({Char}|[\x22]).\'                { return T_character;}
+\"({Char}|[\x27])*\"                { return T_string;}
+{Dig}+                              { return T_integer;}
+{Dig}+[.]{Dig}+((e|E)[+-]?{Dig}+)?  { return T_real;}
+{Op}.                               { return yytext[0];}
+{Sep}.                              { return yytext[0];}
+{White}+                            { /* Ignore white space */ }
+{Name}+                             { cout << yytext << endl;return T_name;}
+.                                   { cout << yytext[0] << endl; fprintf(stderr, "Illegal character with code %d\n",yytext[0]);	exit(1); }
 
 %%
 
