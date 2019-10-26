@@ -7,11 +7,11 @@ rings : integer);
 
 procedure move (var source, target : array of char);
 begin
-  writeString(”Move from ”);
+  writeString("Move from ");
   writeString(source);
-  writeString(” to ”);
+  writeString(" to ");
   writeString(target);
-  writeString(”.\n”)
+  writeString(".\n")
 end;
 
 begin
@@ -24,8 +24,8 @@ begin
 end;
 
 begin
-  writeString(”Please, give the number of rings : ”);
+  writeString("Please, give the number of rings : ");
   numberOfRings := readInteger();
-  writeString(”\nHere is the solution :\n\n”);
-  hanoi(”left”, ”right”, ”middle”, numberOfRings)
+  writeString("\nHere is the solution :\n\n");
+  hanoi("left", "right", "middle", numberOfRings)
 end.

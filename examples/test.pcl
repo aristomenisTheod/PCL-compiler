@@ -1,4 +1,4 @@
 program test;
 begin
-  n = 5
+  n := 5 -3
 end.
