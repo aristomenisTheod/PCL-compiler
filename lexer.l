@@ -11,8 +11,8 @@ using namespace std;
 Name [a-zA-Z]
 Dig [0-9]
 White [ \t\n\r]
-Op [=></+*^@-]
-Sep ":"|"["|"]"|";"
+Op [=></^@*]
+Sep ":"|";"
 Char [\x0\x9\xa\xd\x20\x21\x23-\x26\x28-\x7e]
 
 %%
@@ -24,6 +24,7 @@ false                               { return T_false; }
 boolean                             { return T_booleanId; }
 integer                             { return T_integerId; }
 real                                { return T_realId; }
+char                                { return T_characterId; }
 array                               { return T_array; }
 of                                  { return T_of; }
 and                                 { return T_and; }
@@ -56,6 +57,10 @@ label                               { return T_label; }
 ","                                 { return yytext[0];}
 "("                                 { return yytext[0];}
 ")"                                 { return yytext[0];}
+"-"                                 { return yytext[0];}
+"+"                                 { return yytext[0];}
+"["                                 { return yytext[0];}
+"]"                                 { return yytext[0];}
 \'({Char}|[\x22]).\'                { return T_character;}
 \"({Char}|[\x27])*\"                { return T_string;}
 {Dig}+                              { return T_integer;}
@@ -63,8 +68,8 @@ label                               { return T_label; }
 {Op}.                               { return yytext[0];}
 {Sep}.                              { return yytext[0];}
 {White}+                            { /* Ignore white space */ }
-{Name}+                             { cout << yytext << endl;return T_name;}
-.                                   { cout << yytext[0] << endl; fprintf(stderr, "Illegal character with code %d\n",yytext[0]);	exit(1); }
+{Name}+                             { return T_name;}
+.                                   { fprintf(stderr, "Illegal character with code %d\n",yytext[0]);	exit(1); }
 
 %%
 
