@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 CXX=g++
-CXXFLAGS=-Wall
+CXXFLAGS=-Wall -std=c++11
 
 all: pcl
 
